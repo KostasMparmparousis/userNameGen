@@ -1,0 +1,39 @@
+# Build folder
+target/
+
+# Compiled class file
+*.class
+
+# CSV Output files
+*.csv
+
+# Lag file
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Package Files
+*.rar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.jar
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+#property files
+*.properties
+
+#database configurations
+src/main/resources/META-INF/persistence.xml
+
+#other auto-generated files
+nbactions.xml
+dependency-reduced-pom.xml
+authorizationTokens

@@ -1,0 +1,27 @@
+{
+  	"firstName": {
+  		"name":"kostas",
+        "usePart":{
+          "amountOfChars": 4,
+		  "takeCharsFrom": "end",
+          "percentageOfName": 0.7,
+          "caseSensitive": true
+        },
+      	"placement": "start"
+    },
+  	"lastName":{
+     	"name":"mparmparousis",
+        "placement":"end"
+    },
+    "prefix": "sdi",
+    "academicID": "1115201700095",
+    "separators": ["-", "_"],
+    "upperAmountOfNamesSuggested": 10,
+    "orderBy":"alphabetically",
+    "order":"ascending",
+    "prioritizeBy": [ "prefixedId", "prefixedNames", "partOfNames", "fullNames", "percentOfNames" ],
+    "characterLimits": {
+        "lower" : 4,
+        "upper" : 10
+    }
+}
