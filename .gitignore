@@ -7,6 +7,9 @@ target/
 # CSV Output files
 *.csv
 
+# JSON Request files
+*.json
+
 # Lag file
 *.log
 
