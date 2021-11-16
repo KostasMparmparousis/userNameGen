@@ -1,6 +1,9 @@
 # Build folder
 target/
 
+# Requests folder
+requests/
+
 # Compiled class file
 *.class
 
