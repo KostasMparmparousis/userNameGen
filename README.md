@@ -7,7 +7,11 @@ in a `.json` file. Details about it's structure and interpretation below:
 
 - [JSON Request schema-validator](https://github.com/KostasMparmparousis/userNameGen/wiki/JSON-request-schema-validator)
 - [JSON Request properties explained](https://github.com/KostasMparmparousis/userNameGen/wiki/JSON-request-properties-explained)
+
+# How the userNames are generated
 - [Username generation methods](https://github.com/KostasMparmparousis/userNameGen/wiki/Username-generation-methods)
+
+# What is the response
 - [Response format & Test calls](https://github.com/KostasMparmparousis/userNameGen/wiki/Response-format-&-Test-calls)
 
 
