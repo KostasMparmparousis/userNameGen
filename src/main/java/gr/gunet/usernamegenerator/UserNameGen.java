@@ -14,16 +14,24 @@ import com.google.gson.JsonElement;
 public class UserNameGen {
     private CustomJsonReader jsonReader;
     private String firstName;
+
     private int FNchars=0;
     private String FNtakeCharsFrom;
+
     private double FNpercentageOfName=0.0;
+    private String FNtakePercentFrom;
+
     private boolean FNcaseSensitive=true;
     private String FNplacement;
 
     private String lastName;
+
     private int LNchars=0;
     private String LNtakeCharsFrom;
+
     private double LNpercentageOfName=0.0;
+    private String LNtakePercentFrom;
+
     private boolean LNcaseSensitive=true;
     private String LNplacement;
 
@@ -57,15 +65,19 @@ public class UserNameGen {
                 FNchars = Integer.parseInt(jsonReader.readPropertyAsString("amountOfChars", FNParameters));
 
             FNtakeCharsFrom = jsonReader.readPropertyAsString("takeCharsFrom", FNParameters);
+        }
+        FNParameters= jsonReader.readJsonObject("usePercent", jsonObject);
+        if (FNParameters!=null){
             if (jsonReader.readPropertyAsString("percentageOfName", FNParameters)!=null)
                 FNpercentageOfName = Double.parseDouble(jsonReader.readPropertyAsString("percentageOfName", FNParameters));
 
-            if (jsonReader.readPropertyAsString("caseSensitive", FNParameters)!=null)
-                FNcaseSensitive = Boolean.parseBoolean(jsonReader.readPropertyAsString("caseSensitive", FNParameters));
+            FNtakePercentFrom = jsonReader.readPropertyAsString("takeCharsFrom", FNParameters);
         }
 
-        FNplacement = jsonReader.readPropertyAsString("placement", jsonObject);
+        if (jsonReader.readPropertyAsString("caseSensitive", jsonObject)!=null)
+                FNcaseSensitive = Boolean.parseBoolean(jsonReader.readPropertyAsString("caseSensitive", jsonObject));
 
+        FNplacement = jsonReader.readPropertyAsString("placement", jsonObject);
 
         jsonObject= jsonReader.readJsonObject("lastName");
         lastName = jsonReader.readPropertyAsString("name", jsonObject);
