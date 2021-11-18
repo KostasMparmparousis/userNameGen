@@ -6,6 +6,11 @@ You can call the userNameGenerator API by sending a request file at the endpoint
 in a `.json` file. Details about it's structure and interpretation below:
 
 - [JSON Request schema-validator](https://github.com/KostasMparmparousis/userNameGen/wiki/JSON-request-schema-validator)
+
+The API follows a simple pricipal: ***by adding properties*** to the schema you will essentially enable it to ***construct userNames*** based on a plethora of ***different techniques*** (i.e. prefixedIDs, fullNames, prefixedNames, partOfNames, etc.). Then you will be able to also define how the names are ***ordered and prioritized***.
+
+A closer look to each ***property***:
+
 - [JSON Request properties explained](https://github.com/KostasMparmparousis/userNameGen/wiki/JSON-request-properties-explained)
 
 # How the userNames are generated
