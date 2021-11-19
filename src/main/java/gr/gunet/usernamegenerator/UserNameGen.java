@@ -7,46 +7,46 @@ package gr.gunet.usernamegenerator;
 import gr.gunet.usernamegenerator.tools.CustomJsonReader;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonElement;
+import java.util.Vector;
 /**
  *
  * @author mpkos
  */
 public class UserNameGen {
     private CustomJsonReader jsonReader;
-    private String firstName;
+    private String firstName="";
 
     private int FNchars=0;
-    private String FNtakeCharsFrom;
+    private String FNtakeCharsFrom="";
 
     private double FNpercentageOfName=0.0;
-    private String FNtakePercentFrom;
+    private String FNtakePercentFrom="";
 
-    private boolean FNcaseSensitive=true;
-    private String FNplacement;
+    private String FNplacement="";
 
-    private String lastName;
+    private String lastName="";
 
     private int LNchars=0;
-    private String LNtakeCharsFrom;
+    private String LNtakeCharsFrom="";
 
     private double LNpercentageOfName=0.0;
-    private String LNtakePercentFrom;
+    private String LNtakePercentFrom="";
 
-    private boolean LNcaseSensitive=true;
-    private String LNplacement;
+    private String LNplacement="";
 
-    private String prefix;
-    private String academicID;
+    private String prefix="";
+    private String academicID="";
     private int upperAmountOfNamesSuggested=10;
-    private String orderBy;
-    private String order;
-    private String[] separators;
+    private String orderBy="";
+    private String order="";
+    Vector<String> separators;
     private String[] prioritizeBy;
     private int lowerLimit=0;
     private int upperLimit=0;
 
 
     public UserNameGen(CustomJsonReader JsonReader){
+        separators = new Vector<String>();
         jsonReader=JsonReader;
         prefix = jsonReader.readPropertyAsString("prefix");
         academicID = jsonReader.readPropertyAsString("academicID");
@@ -54,7 +54,17 @@ public class UserNameGen {
             upperAmountOfNamesSuggested = Integer.parseInt(jsonReader.readPropertyAsString("upperAmountOfNamesSuggested"));
         orderBy = jsonReader.readPropertyAsString("orderBy");
         order = jsonReader.readPropertyAsString("order");
-        separators= jsonReader.readPropertyAsStringArray("separators");
+
+        String[] Separators= jsonReader.readPropertyAsStringArray("separators");
+        if (Separators!=null){
+            for (String Separator: Separators){
+                separators.add(Separator);
+            }
+        }
+        else{
+            separators.add("");
+        }
+
         prioritizeBy= jsonReader.readPropertyAsStringArray("prioritizeBy");
 
         JsonObject jsonObject= jsonReader.readJsonObject("firstName");
@@ -74,9 +84,6 @@ public class UserNameGen {
             FNtakePercentFrom = jsonReader.readPropertyAsString("takeCharsFrom", FNParameters);
         }
 
-        if (jsonReader.readPropertyAsString("caseSensitive", jsonObject)!=null)
-                FNcaseSensitive = Boolean.parseBoolean(jsonReader.readPropertyAsString("caseSensitive", jsonObject));
-
         FNplacement = jsonReader.readPropertyAsString("placement", jsonObject);
 
         jsonObject= jsonReader.readJsonObject("lastName");
@@ -90,9 +97,6 @@ public class UserNameGen {
             LNtakeCharsFrom = jsonReader.readPropertyAsString("takeCharsFrom", LNParameters);
             if (jsonReader.readPropertyAsString("percentageOfName", LNParameters)!=null)
                 LNpercentageOfName = Double.parseDouble(jsonReader.readPropertyAsString("percentageOfName", LNParameters));
-
-            if (jsonReader.readPropertyAsString("caseSensitive", LNParameters)!=null)
-                LNcaseSensitive = Boolean.parseBoolean(jsonReader.readPropertyAsString("caseSensitive", LNParameters));
         }
 
         LNplacement = jsonReader.readPropertyAsString("placement", jsonObject);
@@ -105,7 +109,18 @@ public class UserNameGen {
                 upperLimit= Integer.parseInt(jsonReader.readPropertyAsString("upper", jsonObject));
         }
 
-        System.out.println(upperLimit);
+        GeneratingMethods gen= new GeneratingMethods(firstName, lastName, academicID, separators, prefix, FNplacement, LNplacement);
+        Vector<String> fullNames=gen.FullNames();
+        for (String name: fullNames) System.out.println(name);
+
+        if (FNchars!=0 || LNchars!=0){
+            Vector<String> partOfNames=gen.partOfNames(FNchars, FNtakeCharsFrom, LNchars, LNtakeCharsFrom);
+            for (String name: partOfNames) System.out.println(name);
+        }
+
+        if (FNpercentageOfName!=0 || LNpercentageOfName!=0){
+            Vector<String> percentOfNames=gen.percentOfNames(FNpercentageOfName, FNtakePercentFrom, LNpercentageOfName, LNtakePercentFrom);
+            for (String name: percentOfNames) System.out.println(name);
+        }
     }   
-    
 }
