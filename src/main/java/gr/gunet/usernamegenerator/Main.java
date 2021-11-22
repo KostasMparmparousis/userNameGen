@@ -15,7 +15,7 @@ import com.google.gson.JsonElement;
  */
 public class Main {
     public static void main(String[] args) throws Exception {
-        try (CustomJsonReader jsonReader = new CustomJsonReader("requests/request2.json")){
+        try (CustomJsonReader jsonReader = new CustomJsonReader("requests/request3.json")){
             UserNameGen userNameGen= new UserNameGen(jsonReader);
             // String prefix = jsonReader.readPropertyAsString("prefix");
             // if(prefix == null || prefix.trim().equals("")){

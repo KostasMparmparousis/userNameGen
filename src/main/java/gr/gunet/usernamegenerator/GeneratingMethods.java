@@ -19,8 +19,9 @@ public class GeneratingMethods {
     String prefix;
     String FNplacement;
     String LNplacement;
+    String inscriptionYear;
 
-    public GeneratingMethods(String FirstName, String LastName, String AcademicId, Vector<String> Separators, String prefix, String FNplacement, String LNplacement){
+    public GeneratingMethods(String FirstName, String LastName, String AcademicId, String inscriptionYear, Vector<String> Separators, String prefix, String FNplacement, String LNplacement){
         this.FirstName=FirstName;
         this.LastName=LastName;
         this.AcademicId=AcademicId;
@@ -28,6 +29,7 @@ public class GeneratingMethods {
         this.prefix=prefix;
         this.FNplacement=FNplacement;
         this.LNplacement=LNplacement;
+        this.inscriptionYear=inscriptionYear;
     }
 
     public  Vector<String> FullNames(){
@@ -87,13 +89,23 @@ public class GeneratingMethods {
         switch (FNplacement){
             case "start":
                 vec.add(FirstName+Separator+LastName);
+                if (LNplacement.equals("start")){
+                    vec.add(LastName+Separator+FirstName);
+                }
                 break;
             case "end":
                 vec.add(LastName+Separator+FirstName);
+                if (LNplacement.equals("end")){
+                    vec.add(FirstName+Separator+LastName);
+                }
                 break;
             default:
-                if (LNplacement=="start") vec.add(LastName+Separator+FirstName);
-                else if (LNplacement=="end") vec.add(FirstName+Separator+LastName);
+                if (LNplacement.equals("start")){
+                    vec.add(LastName+Separator+FirstName);
+                }
+                else if (LNplacement.equals("end")){
+                    vec.add(FirstName+Separator+LastName);
+                }
                 else{
                     vec.add(LastName+Separator+FirstName);
                     vec.add(FirstName+Separator+LastName);
@@ -122,5 +134,80 @@ public class GeneratingMethods {
                 N=Name.substring(randomInd, randomInd+chars);
         }
         return N;
+    }
+
+    public String prefixedID(){
+        String N="";
+        int length= AcademicId.length();
+        int delim=hasDelimiter(AcademicId);
+        if (delim!=-1){
+            N=AcademicId.substring(delim+1, length);
+        }
+        else if (AcademicId.contains(inscriptionYear)){
+            int index=AcademicId.indexOf(inscriptionYear);
+            N= AcademicId.substring(index+2);
+        }
+        else{
+            N= AcademicId.substring(prefix.length());
+        }
+        return prefix+N;
+    }
+
+    public Vector<String> prefixedNames(){
+        Vector<String> vec = new Vector<String>();
+        vec.add(prefix+capitalize(FirstName)+capitalize(LastName));
+        vec.add(prefix+capitalize(LastName)+capitalize(FirstName));
+        vec.add(prefix+capitalize(FirstName));
+        vec.add(prefix+capitalize(LastName));
+        return vec;
+    }
+
+    public Vector<String> randomNames(int minLimit, int maxLimit, int namesNeeded, Vector<String> proposedNames){
+        Vector<String> vec = new Vector<String>();
+        Random rand = new Random();
+        int size1,size2;
+        if (minLimit==0) minLimit=5;
+        if (maxLimit==0) maxLimit=100;
+        for (int i=0; i<namesNeeded; i++){
+             boolean check = false;
+            int j=0;
+            while (check != true) {
+                String name;
+                size1 = rand.nextInt(FirstName.length());
+                size2 = rand.nextInt(LastName.length()) ;
+
+                if ((size1 + size2) >= minLimit && (size1 + size2) <= maxLimit) {
+                    name = FirstName.substring(0, size1) + LastName.substring(0, size2);
+                    boolean Test=inVector(vec, name);
+                        if (Test==false) {
+                            vec.add(name);
+                            check = true;
+                        }
+                }
+                if (j==20*namesNeeded) check=true;
+                j++;
+            }
+        }
+        return vec;
+    }
+
+    public boolean inVector(Vector<String> proposedNames, String userName){
+        for (String name: proposedNames){
+            if (name.equals(userName)) return true;
+        }
+        return false;
+    }
+
+    int hasDelimiter (String ID){
+        int count=0;
+        for (char ch: ID.toCharArray()) {
+            if (Character.isDigit(ch)==false) return count;
+            count++;
+        }
+        return -1;
+    }
+
+    public String capitalize(String str){
+        return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 }
