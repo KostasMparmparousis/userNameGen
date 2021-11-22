@@ -11,7 +11,7 @@ The API follows a simple principal: ***by adding properties*** to the schema you
 
 A closer look at each ***property***:
 
-- [JSON Request properties explained](https://github.com/KostasMparmparousis/userNameGen/wiki/JSON-request-properties-explained)
+- [JSON Request Properties Explained](https://github.com/KostasMparmparousis/userNameGen/wiki/JSON-Request-Properties-Explained)
 
 # How the userNames are generated
 - [Username generation methods](https://github.com/KostasMparmparousis/userNameGen/wiki/Username-generation-methods)
