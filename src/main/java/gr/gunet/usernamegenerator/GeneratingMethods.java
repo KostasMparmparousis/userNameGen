@@ -45,6 +45,7 @@ public class GeneratingMethods {
 
     public Vector<String> partOfNames(int FNchars, String FNtakeFrom, int LNchars, String LNtakeFrom){
         Vector<String> vec = new Vector<String>();
+        if (FNchars==0 && LNchars==0) return vec;
         int count=0;
         for (String Separator: Separators){
             String FN,LN;
@@ -62,6 +63,7 @@ public class GeneratingMethods {
 
     public Vector<String> percentOfNames(double FNpercent, String FNtakeFrom, double LNpercent, String LNtakeFrom){
         Vector<String> vec = new Vector<String>();
+        if (FNpercent==0.0 && LNpercent==0.0) return vec;
         int count=0;
         for (String Separator: Separators){
             String FN,LN;
@@ -86,31 +88,24 @@ public class GeneratingMethods {
         Vector<String> vec = new Vector<String>();
         if (FNplacement==null) FNplacement="";
         if (LNplacement==null) LNplacement="";
-        switch (FNplacement){
-            case "start":
+
+        if (FNplacement.equals("start"))
+        {
+            if (LNplacement.equals("") || LNplacement==null || LNplacement.equals("end")){
                 vec.add(FirstName+Separator+LastName);
-                if (LNplacement.equals("start")){
-                    vec.add(LastName+Separator+FirstName);
-                }
-                break;
-            case "end":
-                vec.add(LastName+Separator+FirstName);
-                if (LNplacement.equals("end")){
-                    vec.add(FirstName+Separator+LastName);
-                }
-                break;
-            default:
-                if (LNplacement.equals("start")){
-                    vec.add(LastName+Separator+FirstName);
-                }
-                else if (LNplacement.equals("end")){
-                    vec.add(FirstName+Separator+LastName);
-                }
-                else{
-                    vec.add(LastName+Separator+FirstName);
-                    vec.add(FirstName+Separator+LastName);
-                }
+                return vec;
+            }
         }
+        if (LNplacement.equals("start"))
+        {
+            if (FNplacement.equals("") || FNplacement==null || FNplacement.equals("end")){
+                vec.add(LastName+Separator+FirstName);
+                return vec;
+            }
+        }
+
+        vec.add(LastName+Separator+FirstName);
+        vec.add(FirstName+Separator+LastName);
         return vec;
     }
 

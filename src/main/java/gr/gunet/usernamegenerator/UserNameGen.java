@@ -128,13 +128,8 @@ public class UserNameGen {
         Vector<String> partOfNames = new Vector<String>();
         Vector<String> percentOfNames = new Vector<String>();
 
-        if (FNchars!=0 || LNchars!=0){
-            partOfNames=gen.partOfNames(FNchars, FNtakeCharsFrom, LNchars, LNtakeCharsFrom);
-        }
-
-        if (FNpercentageOfName!=0 || LNpercentageOfName!=0){
-            percentOfNames=gen.percentOfNames(FNpercentageOfName, FNtakePercentFrom, LNpercentageOfName, LNtakePercentFrom);
-        }
+        partOfNames=gen.partOfNames(FNchars, FNtakeCharsFrom, LNchars, LNtakeCharsFrom);
+        percentOfNames=gen.percentOfNames(FNpercentageOfName, FNtakePercentFrom, LNpercentageOfName, LNtakePercentFrom);
 
         if (prefix!=null){
             if (academicID!=null) prefixedID= gen.prefixedID();
@@ -149,64 +144,68 @@ public class UserNameGen {
         for (String priority: prioritizeBy){
             switch (priority){
                 case "prefixedID":
-                    if (prefix!=null){
-                        proposedNames.add(prefixedID);
-                        count++;
-                    }
+                    if (prefix!=null) proposedNames.add(prefixedID);
                     break;
                 case "prefixedNames":
-                    if (orderBy!=null){
-                        if (orderBy.equals("alphabetically")){
-                            Collections.sort(prefixedNames);
-                        }
-                        else if (orderBy.equals("size")){
-                            sortBySize(prefixedNames);
-                        }
-                    }
-                    proposedNames.addAll(count, prefixedNames);
-                    count+=prefixedNames.size();
+                    addToArray(proposedNames, prefixedNames);
                     break;
                 case "fullNames":
-                    if (orderBy!=null){
-                        if (orderBy.equals("alphabetically")){
-                            Collections.sort(fullNames);
-                        }
-                        else if (orderBy.equals("size")){
-                            sortBySize(fullNames);
-                        }
-                    }
-                    proposedNames.addAll(count, fullNames);
-                    count+=fullNames.size();
+                    addToArray(proposedNames, fullNames);
                     break;
                 case "partOfNames":
-                    if (orderBy!=null){
-                        if (orderBy.equals("alphabetically")){
-                            Collections.sort(partOfNames);
-                        }
-                        else if (orderBy.equals("size")){
-                            sortBySize(partOfNames);
-                        }
-                    }
-                    proposedNames.addAll(count, partOfNames);
-                    count+=partOfNames.size();
+                    addToArray(proposedNames, partOfNames);
                     break;
                 case "percentOfNames":
-                    if (orderBy!=null){
-                        if (orderBy.equals("alphabetically")){
-                            Collections.sort(percentOfNames);
-                        }
-                        else if (orderBy.equals("size")){
-                            sortBySize(percentOfNames);
-                        }
-                    }
-                    proposedNames.addAll(count, percentOfNames);
-                    count+=percentOfNames.size();
+                    addToArray(proposedNames, percentOfNames);
                     break;
                 default :
                     System.out.println("prioritization technique not found: " + priority);
             }
         }
 
+        proposedNames= charAndSizeLimit(proposedNames);
+        int names=proposedNames.size();
+        Vector<String> randomNames;
+        if (upperAmountOfNamesSuggested!=0){
+            randomNames=gen.randomNames(lowerLimit, upperLimit, upperAmountOfNamesSuggested-names, proposedNames);
+        }
+        else{
+            randomNames=gen.randomNames(lowerLimit, upperLimit, 5, proposedNames);
+        }
+        addToArray(proposedNames, randomNames);
+
+        for (String Name: proposedNames){
+            System.out.println(Name);
+        }
+    }
+
+    private void addToArray(Vector<String> proposedNames, Vector<String> Names){
+        if (orderBy!=null){
+            if (orderBy.equals("alphabetically")){
+                Collections.sort(Names);
+            }
+            else if (orderBy.equals("size")){
+                sortBySize(Names);
+            }
+        }
+        proposedNames.addAll(proposedNames.size(), Names);
+    }
+
+    private void sortBySize(Vector<String> vec){
+        for (int i=1 ;i<vec.size(); i++)
+        {
+            String temp = vec.get(i);
+
+            int j = i - 1;
+            while (j >= 0 && temp.length() < vec.get(j).length())
+            {
+                vec.set(j+1,vec.get(j));
+                j--;
+            }
+            vec.set(j+1,temp);
+        }
+    }
+    public Vector<String> charAndSizeLimit(Vector<String> proposedNames){
         Vector<String> ProposedNames= new Vector<String>();
         for (String Name: proposedNames){
             if (lowerLimit!=0 && Name.length()<lowerLimit) {
@@ -217,61 +216,12 @@ public class UserNameGen {
             }
             ProposedNames.add(Name);
         }
+        if (upperAmountOfNamesSuggested==0) return ProposedNames;
 
         int names=ProposedNames.size();
-        proposedNames=new Vector<String>();
-        if (upperAmountOfNamesSuggested!=0){
-            if (names>=upperAmountOfNamesSuggested){
-                for (int i=0; i<upperAmountOfNamesSuggested; i++){
-                    proposedNames.add(ProposedNames.get(i));
-                }
-            }
-            else{
-                proposedNames=ProposedNames;
-                Vector <String> randomNames=gen.randomNames(lowerLimit, upperLimit, upperAmountOfNamesSuggested-names, proposedNames);
-                if (orderBy!=null){
-                    if (orderBy.equals("alphabetically")){
-                        Collections.sort(randomNames);
-                    }
-                    else if (orderBy.equals("size")){
-                        sortBySize(randomNames);
-                    }
-                }
-                proposedNames.addAll(names, randomNames);
-            }
+        for (int i=names-1; i>=upperAmountOfNamesSuggested; i--){
+            ProposedNames.remove(i);
         }
-        else{
-            proposedNames=ProposedNames;
-           Vector <String> randomNames=gen.randomNames(lowerLimit, upperLimit, 0, proposedNames);
-           if (orderBy!=null){
-               if (orderBy.equals("alphabetically")){
-                   Collections.sort(randomNames);
-               }
-               else if (orderBy.equals("size")){
-                   sortBySize(randomNames);
-               }
-           }
-           proposedNames.addAll(names, randomNames);
-        }
-
-        for (String Name: proposedNames){
-            System.out.println(Name);
-        }
-    }
-
-    public void sortBySize(Vector<String> vec){
-        for (int i=1 ;i<vec.size(); i++)
-        {
-            String temp = vec.get(i);
-
-            // Insert s[j] at its correct position
-            int j = i - 1;
-            while (j >= 0 && temp.length() < vec.get(j).length())
-            {
-                vec.set(j+1,vec.get(j));
-                j--;
-            }
-            vec.set(j+1,temp);
-        }
+        return ProposedNames;
     }
 }
